@@ -26,6 +26,22 @@ app.get('/tasks/:id', async (req, res) => {
   }
 });
 
+app.post('/tasks', async (req, res) => {
+  try {
+    const { title, description, dueDate, isCompleted } = req.body;
+    await db.query(
+      'INSERT INTO tasks (title, description, due_date, is_completed) VALUES ($1, $2, $3, $4)',
+      [title, description, dueDate, isCompleted]
+    );
+    res.status(200).json({
+      status: 'success',
+      data: req.body
+    });
+  } catch (error) {
+    res.status(500).json({ status: 'fail', error: error.message });
+  }
+});
+
 app.get('/', (req, res) => {
   res.status(200).json({
     status: 'ok',
