@@ -42,6 +42,23 @@ app.post('/tasks', async (req, res) => {
   }
 });
 
+app.put('/tasks/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, dueDate, isCompleted } = req.body;
+    await db.query(
+      'UPDATE tasks SET title=$1, description=$2, due_date=$3, is_completed=$4 WHERE id=$5',
+      [title, description, dueDate, isCompleted, id]
+    );
+    res.status(200).json({
+      status: 'success',
+      data: req.body
+    });
+  } catch (error) {
+    res.status(500).json({ status: 'fail', error: error.message });
+  }
+});
+
 app.get('/', (req, res) => {
   res.status(200).json({
     status: 'ok',
