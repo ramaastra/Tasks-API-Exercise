@@ -59,6 +59,16 @@ app.put('/tasks/:id', async (req, res) => {
   }
 });
 
+app.delete('/tasks/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await db.query('DELETE FROM tasks WHERE id=$1', [id]);
+    res.status(200).json({ status: 'success' });
+  } catch (error) {
+    res.status(500).json({ status: 'fail', error: error.message });
+  }
+});
+
 app.get('/', (req, res) => {
   res.status(200).json({
     status: 'ok',
