@@ -16,6 +16,16 @@ app.get('/tasks', async (req, res) => {
   }
 });
 
+app.get('/tasks/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rows } = await db.query('SELECT * FROM tasks WHERE id=$1', [id]);
+    res.status(200).json(rows);
+  } catch (error) {
+    res.status(500).json({ status: 'fail', error: error.message });
+  }
+});
+
 app.get('/', (req, res) => {
   res.status(200).json({
     status: 'ok',
