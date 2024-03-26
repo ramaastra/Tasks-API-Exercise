@@ -33,7 +33,7 @@ app.post('/tasks', async (req, res) => {
       'INSERT INTO tasks (title, description, due_date, is_completed) VALUES ($1, $2, $3, $4)',
       [title, description, dueDate, isCompleted]
     );
-    res.status(200).json({
+    res.status(201).json({
       status: 'success',
       data: req.body
     });
