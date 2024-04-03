@@ -2,12 +2,19 @@ const express = require('express');
 require('dotenv').config();
 const db = require('./db');
 const cors = require('cors');
+const fs = require('fs');
+const YAML = require('yaml');
+const swaggerUI = require('swagger-ui-express');
+const docsYAML = fs.readFileSync('./api-docs.yaml', 'utf8');
+const docsJSON = YAML.parse(docsYAML);
 
 const app = express();
 const port = 3000;
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(docsJSON));
 
 app.get('/tasks', async (req, res) => {
   try {
