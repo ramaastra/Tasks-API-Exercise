@@ -1,0 +1,242 @@
+openapi: '3.0.2'
+info:
+  title: Tasks API
+  version: '1.0'
+  description: Basic API for tasks management system with CRUD operations.
+servers:
+  - url: http://localhost:3000
+components:
+  schemas:
+    Task (database):
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1
+        title:
+          type: string
+          example: Do the Chapter 5 Challenge
+        description:
+          type: string
+          example: Create a basic API docs using Swagger.
+        due_date:
+          type: string
+          example: 2024-04-14T16:00:00.000Z
+        is_completed:
+          type: boolean
+          example: false
+    Task (req.body):
+      type: object
+      properties:
+        title:
+          type: string
+          example: Do the Chapter 5 Challenge
+        description:
+          type: string
+          example: Create a basic API docs using Swagger.
+        dueDate:
+          type: string
+          example: 2024-04-14
+        isCompleted:
+          type: boolean
+          example: false
+  requestBodies:
+    Task:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: Do the Chapter 5 Challenge
+              description:
+                type: string
+                example: Create a basic API docs using Swagger.
+              dueDate:
+                type: string
+                example: 2024-04-14
+              isCompleted:
+                type: boolean
+                example: false
+paths:
+  /:
+    get:
+      description: Checks connection to server
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  message:
+                    type: string
+                    example: server connected successfully
+  /tasks:
+    get:
+      description: Fetch all task records
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Task (database)'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  error:
+                    type: string
+                    example: internal server error
+    post:
+      description: Create a new task record
+      requestBody:
+        $ref: '#/components/requestBodies/Task'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/Task (req.body)'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  error:
+                    type: string
+                    example: internal server error
+
+  /tasks/{id}:
+    get:
+      description: Fetch a specific task record
+      parameters:
+        - schema:
+            type: integer
+            minimum: 1
+          name: id
+          in: path
+          required: true
+          description: Task's unique id
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Task (database)'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  error:
+                    type: string
+                    example: internal server error
+
+    put:
+      description: Update a specific task record
+      parameters:
+        - schema:
+            type: integer
+            minimum: 1
+          name: id
+          in: path
+          required: true
+          description: Task's unique id
+      requestBody:
+        $ref: '#/components/requestBodies/Task'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/Task (req.body)'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  error:
+                    type: string
+                    example: internal server error
+
+    delete:
+      description: Delete a specific task record
+      parameters:
+        - schema:
+            type: integer
+            minimum: 1
+          name: id
+          in: path
+          required: true
+          description: Task's unique id
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  error:
+                    type: string
+                    example: internal server error
